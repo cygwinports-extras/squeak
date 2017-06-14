@@ -1,0 +1,53 @@
+NAME="squeak"
+VERSION=4.6.15102
+RELEASE=1
+CATEGORY="Interpreters"
+SUMMARY="Smalltalk programming environment"
+DESCRIPTION="Squeak is an open-source Smalltalk programming system with fast
+execution environments for all major platforms. Many projects have been
+successfully created with Squeak. They cover a wide range of domains such as
+education, multimedia, gaming, research, and commerce."
+HOMEPAGE="http://squeak.org/"
+SRC_URI="
+	http://ftp.squeak.org/${VERSION%.*}/Squeak${VERSION%.*}-${VERSION##*.}.zip
+	http://ftp.squeak.org/${VERSION%.*}/SqueakV46.sources.zip
+	http://pkgs.fedoraproject.org/cgit/rpms/squeak-vm.git/plain/inisqueak
+	http://pkgs.fedoraproject.org/repo/pkgs/squeak-vm/squeak-desktop-files.tar.gz/9cdcd2067b498c217f1a1131dc1356a3/squeak-desktop-files.tar.gz
+"
+SRC_DIR=.
+PATCH_URI="mysqueak-r.patch"
+
+ARCH=noarch
+
+REQUIRES="squeak-vm"
+
+src_compile() { :; }
+
+src_install() {
+	cd ${S}
+	dobin inisqueak mysqueak
+	doman mysqueak.1
+
+	insinto /usr/share/squeak
+	doins *.image *.changes *.sources
+
+	pushd ${D}/usr/share/squeak
+	gzip *.image *.changes *.sources
+	ln -s Squeak*.image.gz squeak.image.gz
+	ln -s Squeak*.changes.gz squeak.changes.gz
+	ln -s Squeak*.sources.gz squeak.sources.gz
+	popd
+
+	for i in 16 24 32 48 64 72 96
+	do
+		insinto /usr/share/icons/hicolor/${i}x${i}/mimetypes
+	  	newins squeak${i}.png application-x-squeak-image.png
+	 	newins squeaksource${i}.png application-x-squeak-source.png
+	done
+
+	insinto /usr/share/mime/packages
+	doins squeak.xml
+
+	domenu squeak.desktop
+	doicon squeak.png
+}

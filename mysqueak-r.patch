@@ -1,0 +1,21 @@
+--- origsrc/mysqueak	2009-01-20 11:11:52.000000000 -0600
++++ src/mysqueak	2017-06-13 22:48:39.001404200 -0500
+@@ -2,6 +2,6 @@
+ 
+ mkdir -p ~/MySqueak/default
+ cd ~/MySqueak/default
+-exec inisqueak -b
++exec inisqueak -b $@
+ 
+ 
+--- origsrc/squeak.desktop	2009-01-20 11:11:52.000000000 -0600
++++ src/squeak.desktop	2017-06-13 22:48:45.290893000 -0500
+@@ -4,7 +4,7 @@ Type=Application
+ Name=MySqueak
+ GenericName=Smalltalk Environment
+ Comment=starts mysqueak
+-Exec=mysqueak
++Exec=mysqueak -r
+ Terminal=false
+ Icon=squeak
+ MimeType=application/x-squeak-image;
